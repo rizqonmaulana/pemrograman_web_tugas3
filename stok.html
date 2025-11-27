@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stok Bahan Ajar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/stok.css">
+</head>
+
+<body>
+    <div id="app"></div>
+
+    <!-- Vue Component Templates -->
+    <script type="text/x-template" id="notification-template">
+        <div v-if="message" :class="notificationClass" :style="notificationStyle">
+            <i :class="iconClass" :style="iconStyle"></i>
+            <span v-text="message"></span>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="stock-card-template">
+        <div class="stock-item" @click="$emit('click', item)">
+            <div class="stock-item-info">
+                <p class="label">Kode Bahan Ajar</p>
+                <p class="value">{{ item.kode }}</p>
+                
+                <p class="label">Judul</p>
+                <p class="value">{{ item.judul }}</p>
+                
+                <p class="label">Kategori</p>
+                <p class="value">{{ item.kategori }}</p>
+                
+                <p class="label">UPBJJ</p>
+                <p class="value">{{ item.upbjj }}</p>
+                
+                <p class="label">Lokasi Rak</p>
+                <p class="value">{{ item.lokasiRak }}</p>
+                
+                <p class="label">Harga</p>
+                <p class="value">{{ formatRupiah(item.harga) }}</p>
+                
+                <p class="label">Stok Tersedia</p>
+                <p class="value">
+                    <span class="stock-badge" :class="getStockClass(item.qty, item.safety)">
+                        {{ item.qty }} unit
+                    </span>
+                </p>
+                
+                <p class="label">Safety Stock</p>
+                <p class="value">{{ item.safety }} unit</p>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/x-template" id="form-input-template">
+        <div class="detail-row">
+            <span class="detail-label">{{ label }} <span v-if="required">*</span></span>
+            <input 
+                v-if="type !== 'select' && type !== 'textarea'"
+                class="detail-value" 
+                :type="type"
+                :value="value"
+                @input="$emit('input', $event.target.value)"
+                :placeholder="placeholder"
+                :required="required"
+                :disabled="disabled"
+            />
+            <select 
+                v-if="type === 'select'"
+                class="detail-value"
+                :value="value"
+                @change="$emit('input', $event.target.value)"
+                :required="required"
+                :disabled="disabled"
+            >
+                <option value="">{{ placeholder }}</option>
+                <option v-for="option in options" :key="option" :value="option">
+                    {{ option }}
+                </option>
+            </select>
+            <textarea
+                v-if="type === 'textarea'"
+                class="detail-value"
+                :value="value"
+                @input="$emit('input', $event.target.value)"
+                :placeholder="placeholder"
+                :required="required"
+            ></textarea>
+            <span v-if="error" class="error-message" style="color: #f44336; font-size: 12px; margin-top: 5px; display: block;" v-text="error"></span>
+        </div>
+    </script>
+
+    <script src="js/dataBahanAjar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+    <script src="js/stok-app.js"></script>
+</body>
+
+</html>
